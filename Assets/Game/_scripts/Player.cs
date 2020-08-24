@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _hitMarkerPrefab;
     private GameObject _hitClone;
+    [SerializeField]
+    private AudioSource _shootSound;
 
      
     // Start is called before the first frame update
@@ -89,13 +91,18 @@ public class Player : MonoBehaviour
         if(Input.GetMouseButton(0))
         {
             _muzzleFlash.SetActive(true);
+            if(_shootSound.isPlaying == false)
+            {
+            _shootSound.Play();
+            }
             Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hitInfo;
+            
 
             if (Physics.Raycast(rayOrigin, out hitInfo))
             {
                 Debug.Log("Hit: " + hitInfo.transform.name);
-                _hitClone = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                _hitClone = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal)) as GameObject;
                 Destroy(_hitClone, 1.0f);
             }
             
@@ -104,6 +111,7 @@ public class Player : MonoBehaviour
         else
         {
             _muzzleFlash.SetActive(false);
+            _shootSound.Stop();
         }
 
     }
