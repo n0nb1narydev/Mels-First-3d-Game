@@ -9,18 +9,22 @@ public class Player : MonoBehaviour
     CharacterController _controller;
     [SerializeField]
     private float _speed = 3.5f;
-    private float _gravity = .7f;
-    private float _jumpHeight = 7f;
+    private float _gravity = 1f;
+    private float _jumpHeight = 10f;
     private float _yVelocity;
     NavMeshAgent _navMeshAgent;
-    
+    [SerializeField]
+    private GameObject _muzzleFlash;
+    [SerializeField]
+    private GameObject _hitMarkerPrefab;
+    private GameObject _hitClone;
 
      
     // Start is called before the first frame update
     void Start()
     {
         _controller = GetComponent<CharacterController>(); 
-        _navMeshAgent = GetComponent<NavMeshAgent>();   
+        _navMeshAgent = GetComponent<NavMeshAgent>();  
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -28,13 +32,18 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CalculateMovement();
+        //if left click cast ray from center point of main camera
+        
+
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
+    
+    FireGun();
+    CalculateMovement();
       
     }
 
@@ -75,4 +84,28 @@ public class Player : MonoBehaviour
         _navMeshAgent.enabled = true;
 
     }
+    void FireGun()
+    {
+        if(Input.GetMouseButton(0))
+        {
+            _muzzleFlash.SetActive(true);
+            Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hitInfo;
+
+            if (Physics.Raycast(rayOrigin, out hitInfo))
+            {
+                Debug.Log("Hit: " + hitInfo.transform.name);
+                _hitClone = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(_hitClone, 1.0f);
+            }
+            
+
+        }
+        else
+        {
+            _muzzleFlash.SetActive(false);
+        }
+
+    }
+    
 }
