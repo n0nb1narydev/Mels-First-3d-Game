@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 3.5f;
     private float _gravity = .7f;
-    private float _jumpHeight = 10f;
+    private float _jumpHeight = 7f;
     private float _yVelocity;
     NavMeshAgent _navMeshAgent;
     
@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
     {
         
         _navMeshAgent.enabled = false;
-        yield return new WaitForSeconds(.7f);
+        yield return new WaitForSeconds(1f);
         _navMeshAgent.enabled = true;
 
     }
