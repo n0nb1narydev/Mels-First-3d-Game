@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 3.5f;
     private float _gravity = 1f;
-    private float _jumpHeight = 10f;
+    private float _jumpHeight = 7f;
     private float _yVelocity;
     NavMeshAgent _navMeshAgent;
     [SerializeField]
