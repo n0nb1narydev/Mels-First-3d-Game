@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 3.5f;
     private float _gravity = .7f;
-    private float _jumpHeight = 12f;
+    private float _jumpHeight = 10f;
     private float _yVelocity;
 
      
@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
         Vector3 velocity = _speed * direction;
         velocity.y = _yVelocity;
         _yVelocity -= _gravity; 
+
+        velocity = transform.transform.TransformDirection(velocity);
         
             //To Jump
         if(_controller.isGrounded == true)
