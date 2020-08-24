@@ -21,16 +21,26 @@ public class Player : MonoBehaviour
     {
         _controller = GetComponent<CharacterController>(); 
         _navMeshAgent = GetComponent<NavMeshAgent>();   
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
     void Update()
     {
         CalculateMovement();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+      
     }
 
     void CalculateMovement()
     {
+        
         float horizontalInput = Input.GetAxis("Horizontal");  
         float verticalInput = Input.GetAxis("Vertical");
 
@@ -54,6 +64,7 @@ public class Player : MonoBehaviour
         }
           
         _controller.Move(velocity * Time.deltaTime);
+        
     }
     //to allow jumping (try to find better way if possible)
     IEnumerator DisableAgent()
