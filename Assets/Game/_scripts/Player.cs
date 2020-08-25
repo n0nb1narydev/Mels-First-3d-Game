@@ -20,6 +20,11 @@ public class Player : MonoBehaviour
     private GameObject _hitClone;
     [SerializeField]
     private AudioSource _shootSound;
+    [SerializeField]
+    private AudioSource _reloadSound;
+    [SerializeField]
+    private int _currentAmmo;
+    private int _maxAmmo = 50;
 
      
     // Start is called before the first frame update
@@ -29,23 +34,35 @@ public class Player : MonoBehaviour
         _navMeshAgent = GetComponent<NavMeshAgent>();  
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+        _currentAmmo = _maxAmmo;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
-        //if left click cast ray from center point of main camera
-        
-
-
+        //if left click cast ray from center point of main camera  
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
     
-    FireGun();
-    CalculateMovement();
+        if(Input.GetMouseButton(0) && _currentAmmo > 0)
+        {
+            FireGun();
+        }
+        else
+        {
+            _muzzleFlash.SetActive(false);
+            _shootSound.Stop();
+        }
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            StartCoroutine(Reload());
+        }
+
+        CalculateMovement();
       
     }
 
@@ -87,10 +104,10 @@ public class Player : MonoBehaviour
 
     }
     void FireGun()
-    {
-        if(Input.GetMouseButton(0))
-        {
+    {   
             _muzzleFlash.SetActive(true);
+            _currentAmmo --;
+
             if(_shootSound.isPlaying == false)
             {
             _shootSound.Play();
@@ -104,16 +121,16 @@ public class Player : MonoBehaviour
                 Debug.Log("Hit: " + hitInfo.transform.name);
                 _hitClone = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal)) as GameObject;
                 Destroy(_hitClone, 1.0f);
-            }
-            
-
-        }
-        else
-        {
-            _muzzleFlash.SetActive(false);
-            _shootSound.Stop();
-        }
-
+            } 
     }
+    IEnumerator Reload()
+    {
+        _reloadSound.Play();
+        yield return new WaitForSeconds(1.5f);
+        _currentAmmo = _maxAmmo;
+        _reloadSound.Stop();
+    }
+    
+    
     
 }
