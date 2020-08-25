@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _currentAmmo;
     private int _maxAmmo = 50;
+    private bool _isReloading = false;
 
      
     // Start is called before the first frame update
@@ -57,8 +58,9 @@ public class Player : MonoBehaviour
             _shootSound.Stop();
         }
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if(Input.GetKeyDown(KeyCode.R) && _isReloading == false)
         {
+            _isReloading = true;
             StartCoroutine(Reload());
         }
 
@@ -125,10 +127,11 @@ public class Player : MonoBehaviour
     }
     IEnumerator Reload()
     {
+       
         _reloadSound.Play();
         yield return new WaitForSeconds(1.5f);
         _currentAmmo = _maxAmmo;
-        _reloadSound.Stop();
+        _isReloading = false;
     }
     
     
