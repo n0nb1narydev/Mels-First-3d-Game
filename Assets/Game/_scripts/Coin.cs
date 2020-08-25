@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private AudioSource _coinPickupSound;
+    private Player _player;
 
-    // Update is called once per frame
-    void Update()
+    private void Start() 
     {
-        
+        _coinPickupSound = GetComponent<AudioSource>();
+        _player = GameObject.Find("Player").GetComponent<Player>();
+    }
+    private void OnTriggerStay(Collider other) 
+    {
+        if(other.tag == "Player" && Input.GetKeyDown(KeyCode.E))
+        {
+            _player.hasCoin = true;
+            _coinPickupSound.Play();
+            Destroy(this.gameObject, 1f);
+        }
     }
 }
