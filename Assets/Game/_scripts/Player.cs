@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -23,9 +24,12 @@ public class Player : MonoBehaviour
     [SerializeField]
     private AudioSource _reloadSound;
     [SerializeField]
-    private int _currentAmmo;
-    private int _maxAmmo = 50;
+    public int currentAmmo;
+    public int _maxAmmo = 50;
     private bool _isReloading = false;
+    private UI_Manager _uiManager;
+    [SerializeField]
+    private Text _reloadText;
 
      
     // Start is called before the first frame update
@@ -33,9 +37,12 @@ public class Player : MonoBehaviour
     {
         _controller = GetComponent<CharacterController>(); 
         _navMeshAgent = GetComponent<NavMeshAgent>();  
+        _uiManager = GameObject.Find("Canvas").GetComponent<UI_Manager>();
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
-        _currentAmmo = _maxAmmo;
+        currentAmmo = _maxAmmo;
+        _uiManager.UpdateAmmo(currentAmmo);
+
     }
 
     
@@ -48,9 +55,9 @@ public class Player : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
     
-        if(Input.GetMouseButton(0) && _currentAmmo > 0)
+        if(Input.GetMouseButton(0) && currentAmmo > 0 && _isReloading == false)
         {
-            FireGun();
+            FireGun();  
         }
         else
         {
@@ -108,7 +115,8 @@ public class Player : MonoBehaviour
     void FireGun()
     {   
             _muzzleFlash.SetActive(true);
-            _currentAmmo --;
+            currentAmmo --;
+            _uiManager.UpdateAmmo(currentAmmo);
 
             if(_shootSound.isPlaying == false)
             {
@@ -116,7 +124,11 @@ public class Player : MonoBehaviour
             }
             Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hitInfo;
-            
+
+            if(currentAmmo == 0)
+            {
+                StartCoroutine(FlashingReloadText());
+            }          
 
             if (Physics.Raycast(rayOrigin, out hitInfo))
             {
@@ -130,10 +142,20 @@ public class Player : MonoBehaviour
        
         _reloadSound.Play();
         yield return new WaitForSeconds(1.5f);
-        _currentAmmo = _maxAmmo;
+        currentAmmo = _maxAmmo;
+        _uiManager.UpdateAmmo(currentAmmo);
         _isReloading = false;
     }
     
-    
+    IEnumerator FlashingReloadText()
+    {
+        while(currentAmmo == 0)
+        {
+        _reloadText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        _reloadText.gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.5f);  
+        }
+    }
     
 }
