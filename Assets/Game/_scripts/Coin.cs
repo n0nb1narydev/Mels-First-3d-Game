@@ -10,6 +10,7 @@ public class Coin : MonoBehaviour
     private Player _player;
     [SerializeField]
     private Text _pickupText;
+    
 
     private void Start() 
     {
@@ -28,6 +29,12 @@ public class Coin : MonoBehaviour
         {
         _player.hasCoin = true;
         AudioSource.PlayClipAtPoint(_coinPickupSound, transform.position, 1f); //instantiate sound clip (sound, location, volume)
+        UI_Manager uiManager = GameObject.Find("Canvas").GetComponent<UI_Manager>();
+
+        if(uiManager != null)
+        {
+            uiManager.CollectedCoin();
+        }
         Destroy(this.gameObject);
         _pickupText.gameObject.SetActive(false);
         }

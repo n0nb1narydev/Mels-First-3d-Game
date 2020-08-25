@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     private Text _reloadText;
     [SerializeField]
     public bool hasCoin = false;
+   
      
     // Start is called before the first frame update
     void Start()
@@ -73,7 +74,6 @@ public class Player : MonoBehaviour
         }
 
         CalculateMovement();
-      
     }
 
     void CalculateMovement()
