@@ -13,11 +13,15 @@ public class UI_Manager : MonoBehaviour
 
     public void UpdateAmmo(int count)
     {
-
+        _ammoText.gameObject.SetActive(true);
         _ammoText.text = "Ammo: " + count;
     }
     public void CollectedCoin()
     {
         _coinImage.SetActive(true);
+    }
+    public void RemoveCoin()
+    {
+        _coinImage.SetActive(false);
     }
 }

@@ -32,6 +32,9 @@ public class Player : MonoBehaviour
     private Text _reloadText;
     [SerializeField]
     public bool hasCoin = false;
+    [SerializeField]
+    private GameObject _weapon;
+    public bool hasWeapon = false;
    
      
     // Start is called before the first frame update
@@ -43,7 +46,7 @@ public class Player : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         currentAmmo = _maxAmmo;
-        _uiManager.UpdateAmmo(currentAmmo);
+        // _uiManager.UpdateAmmo(currentAmmo);
 
     }
 
@@ -72,7 +75,10 @@ public class Player : MonoBehaviour
             _isReloading = true;
             StartCoroutine(Reload());
         }
-
+        if (hasWeapon == true)
+        {
+            _uiManager.UpdateAmmo(currentAmmo);
+        }
         CalculateMovement();
     }
 
@@ -115,6 +121,8 @@ public class Player : MonoBehaviour
     }
     void FireGun()
     {   
+        if(hasWeapon == true)
+        {
             _muzzleFlash.SetActive(true);
             currentAmmo --;
             _uiManager.UpdateAmmo(currentAmmo);
@@ -136,7 +144,11 @@ public class Player : MonoBehaviour
                 Debug.Log("Hit: " + hitInfo.transform.name);
                 _hitClone = Instantiate(_hitMarkerPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal)) as GameObject;
                 Destroy(_hitClone, 1.0f);
+
+                //check if crate hit
+                //destroy crate
             } 
+        }
     }
     IEnumerator Reload()
     {
@@ -157,6 +169,11 @@ public class Player : MonoBehaviour
         _reloadText.gameObject.SetActive(false);
         yield return new WaitForSeconds(0.5f);  
         }
+    }
+    public void EnableWeapons()
+    {
+        _weapon.SetActive(true);
+        hasWeapon = true;
     }
     
 }

@@ -23,6 +23,13 @@ public class Coin : MonoBehaviour
         _pickupText.gameObject.SetActive(true);
         }
     }
+    private void OnTriggerExit(Collider other) 
+    {
+        if(other.tag == "Player")
+        {
+        _pickupText.gameObject.SetActive(false);
+        }
+    }
     private void OnTriggerStay(Collider other) 
     {
         if(other.tag == "Player" && Input.GetKeyDown(KeyCode.E))
