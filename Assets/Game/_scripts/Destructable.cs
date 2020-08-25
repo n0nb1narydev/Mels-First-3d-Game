@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Destructable : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private GameObject _crateDestroyed;
+    [SerializeField]
+    private GameObject _cratePieces;
+
+    public void DestroyCrate()
     {
-        
+        _cratePieces = Instantiate(_crateDestroyed, transform.position, transform.rotation);
+        Destroy(this.gameObject);
+        Destroy(_cratePieces, 10.0f);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

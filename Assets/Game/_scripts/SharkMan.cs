@@ -8,8 +8,10 @@ public class SharkMan : MonoBehaviour
  
     [SerializeField]
     private AudioClip _youWin;
+   
     [SerializeField]
     private Text _interactText;
+
 
       private void OnTriggerEnter(Collider other) 
     {
@@ -40,22 +42,14 @@ public class SharkMan : MonoBehaviour
                     uiManager.RemoveCoin();
                     player.EnableWeapons();
                     AudioSource.PlayClipAtPoint(_youWin, transform.position, 1f);
-
                } 
-               else if (player.hasCoin = false)
+               else if (player.hasCoin == false)
                {
-                    AudioSource audio = GetComponent<AudioSource>();
-                    audio.Play();
+                   AudioSource audio = GetComponent<AudioSource>();
+                   audio.Play();
                }
            } 
          
         }    
     }
-    //check for collision with player
-    //if player 
-    //check for ekey and if has coin
-        //remove coin from player
-        //update display
-        //play win sound
-    //if doesnt have coin grunt audio
 }
